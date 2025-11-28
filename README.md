@@ -105,13 +105,13 @@ High-level flow:
 
 ### Clone and run
 
-bash
+```bash
 git clone <your-repo-url>
 cd <your-repo-folder>
 
 # build and start proxy, services, Prometheus, Grafana
 docker compose up --build
-bash
+```
 
 Once everything is healthy:
 
@@ -201,7 +201,7 @@ Metrics:
 
 ---
 
-## Demo script (what to show)
+## Demo script (/hide)
 
 This is the flow you can use in interviews or a screencast.
 
@@ -246,7 +246,7 @@ This is the flow you can use in interviews or a screencast.
 
 ---
 
-## Important Prometheus metrics
+## Prometheus metrics
 
 From the proxy:
 
@@ -277,25 +277,31 @@ These support Grafana panels for RPS, error rate, and latency.
 
 ---
 
-## Repository layout (suggested)
+## Repository layout
 
 ```text
-.
-├── proxy/                 # Go proxy / API gateway
-│   ├── main.go
-│   ├── config.go
-│   ├── metrics.go
-│   ├── guardrail.go
-│   ├── diff.go
-│   ├── proxy_handler.go
-│   └── go.mod
-├── src/                   # Java Spring Boot service (both v1 and v2)
-├── pom.xml
-├── Dockerfile             # Builds the Java service image
-├── compose.yaml           # Runs proxy, v1, v2, Prometheus, Grafana
-├── observability/
-│   └── prometheus.yml
-├── docs/
-│   └── architecture.png   # Architecture diagram
-└── README.md
+mirrorlab/
+    ├── .mvn/
+    ├── docs/
+    ├── observability/
+    │   └── prometheus.yml
+    ├── proxy/
+    │   ├── main.go
+    │   ├── config.go
+    │   ├── metrics.go
+    │   ├── guardrail.go
+    │   ├── diff.go
+    │   └── proxy_handler.go
+    ├── src/
+    │   └── ... (v1-v2 service)
+    ├── target/
+    ├── .gitattributes
+    ├── .gitignore
+    ├── compose.yaml
+    ├── Dockerfile
+    ├── HELP.md
+    ├── mvnw
+    ├── mvnw.cmd
+    └── pom.xml
+    └── README.md
 ```
