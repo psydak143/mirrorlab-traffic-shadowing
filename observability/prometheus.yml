@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # Proxy: Go mirror/gateway
+  - job_name: 'proxy'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['proxy:8080']
+
+  # Java baseline service (v1)
+  - job_name: 'service-v1'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['service-v1:4001']
+
+  # Java candidate service (v2)
+  - job_name: 'service-v2'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['service-v2:4002']

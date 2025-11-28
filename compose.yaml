@@ -1,0 +1,86 @@
+# compose.yaml
+
+services:
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    container_name: mirrorlab-proxy
+    environment:
+      BASELINE_URL: http://service-v1:4001
+      CANDIDATE_URL: http://service-v2:4002
+      MIRROR_FRACTION: "0.25"
+      LISTEN_ADDR: ":8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-v1
+      - service-v2
+    restart: unless-stopped
+
+  service-v1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service-v1
+    environment:
+      SERVICE_NAME: service-v1
+      PORT: 4001
+      CHAOS_LATENCY_MS: 0         # no extra latency
+      CHAOS_JITTER_MS: 0
+      CHAOS_ERROR_RATE: 0.0       # no injected errors
+    ports:
+      - "4001:4001"               # host:container
+    restart: unless-stopped
+
+  service-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service-v2
+    environment:
+      SERVICE_NAME: service-v2
+      PORT: 4002
+      CHAOS_LATENCY_MS: 200       # base latency in ms
+      CHAOS_JITTER_MS: 100        # extra random 0–100ms
+      CHAOS_ERROR_RATE: 0.02      # 2% injected 500 errors
+    ports:
+      - "4002:4002"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: mirrorlab-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom_data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - proxy
+      - service-v1
+      - service-v2
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: mirrorlab-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  prom_data:
+  grafana_data:
