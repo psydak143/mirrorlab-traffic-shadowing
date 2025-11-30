@@ -1,0 +1,9 @@
+apiVersion: 1
+
+providers:
+  - name: 'MirrorLab dashboards'
+    orgId: 1
+    type: file
+    folder: 'MirrorLab'
+    options:
+      path: /var/lib/grafana/dashboards

@@ -77,8 +77,8 @@ func LoadConfig() Config {
 
 		LatencyRatioThreshold: getenvFloat("ABORT_P99_RATIO", 1.15),    // >1.15x slower
 		ErrorDeltaThreshold:   getenvFloat("ABORT_ERROR_DELTA", 0.005), // unused in this simplified guard, but kept for config
-		BreachConsecutive:     getenvInt("ABORT_CONSECUTIVE", 3),
-		Cooldown:              getenvDurationSeconds("ABORT_COOLDOWN", 600*time.Second),
+		BreachConsecutive:     getenvInt("ABORT_CONSECUTIVE", 5),
+		Cooldown:              getenvDurationSeconds("ABORT_COOLDOWN", 10*time.Second),
 
 		ListenAddr: getenv("LISTEN_ADDR", ":8080"),
 	}

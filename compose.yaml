@@ -9,7 +9,6 @@ services:
     environment:
       BASELINE_URL: http://service-v1:4001
       CANDIDATE_URL: http://service-v2:4002
-      MIRROR_FRACTION: "0.25"
       LISTEN_ADDR: ":8080"
     ports:
       - "8080:8080"
@@ -43,7 +42,7 @@ services:
       PORT: 4002
       CHAOS_LATENCY_MS: 200       # base latency in ms
       CHAOS_JITTER_MS: 100        # extra random 0–100ms
-      CHAOS_ERROR_RATE: 0.02      # 2% injected 500 errors
+      CHAOS_ERROR_RATE: 0.22      # 2% injected 500 errors
     ports:
       - "4002:4002"
     restart: unless-stopped
@@ -79,6 +78,9 @@ services:
       - prometheus
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./dashboards:/var/lib/grafana/dashboards
     restart: unless-stopped
 
 volumes:
