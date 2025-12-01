@@ -392,13 +392,9 @@ docker compose up --build
 Then, in another terminal (Windows cmd example):
 
 ```bash
-cd C:\mirrorlab-traffic-shadowing\mirrorlab
+cd C:\mirrorlab-traffic-shadowing
 
-docker run --rm -it ^
---network mirrorlab_default ^
--v "%cd%\load:/scripts" ^
--e BASE_URL=http://proxy:8080 ^
-grafana/k6 run /scripts/k6-shadow.js
+docker run --rm -it --network mirrorlab-traffic-shadowing_default -v "%cd%\load:/scripts" -e BASE_URL=http://proxy:8080 grafana/k6 run /scripts/k6-shadow.js
 ```
 
 Notes:
@@ -439,4 +435,4 @@ From Java services (Micrometer):
 
 ## License
 
-MIT.
+This project is licensed under the MIT License. See the LICENSE file for details.
