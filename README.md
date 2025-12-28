@@ -12,7 +12,7 @@ MirrorLab is an end-to-end demo of **safe releases**:
     - `service-v2` – candidate (configurable latency and error injection).
 - **Prometheus + Grafana** with a pre-provisioned dashboard to visualize RPS, latency, errors, diffs, and guardrail behaviour.
 - A **k6** load script to drive traffic through the proxy.
-- 
+  
 ---
 
 ## Architecture
